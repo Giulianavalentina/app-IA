@@ -10,14 +10,14 @@ import {
 import { useGame } from '../context/GameContext';
 
 export default function ResultScreen({ navigation }) {
-  const { 
-    currentObject, 
-    capturedImage, 
+  const {
+    currentObject,
+    capturedImage,
     markObjectAsFound,
     setCapturedImage,
-    setCurrentObject 
+    setCurrentObject
   } = useGame();
-  
+
   const [result, setResult] = useState(null);
   const [isLoading, setIsLoading] = useState(true);
 
@@ -51,7 +51,7 @@ export default function ResultScreen({ navigation }) {
 
   if (isLoading) {
     return (
-      <SafeAreaView style={styles.container}>
+      <SafeAreaView style={[styles.container, { backgroundColor: '#D6C9D9' }]}>
         <View style={styles.content}>
           <Text style={styles.title}>Evaluando...</Text>
           <View style={styles.loadingContainer}>
@@ -63,10 +63,10 @@ export default function ResultScreen({ navigation }) {
   }
 
   return (
-    <SafeAreaView style={styles.container}>
+    <SafeAreaView style={[styles.container, { backgroundColor: '#D6C9D9' }]}>
       <View style={styles.content}>
         <Text style={styles.title}>Resultado de la IA</Text>
-        
+
         {capturedImage && (
           <View style={styles.imageContainer}>
             <Image source={{ uri: capturedImage }} style={styles.capturedImage} />
@@ -80,7 +80,7 @@ export default function ResultScreen({ navigation }) {
           ]}>
             {result ? '✅ ¡Correcto!' : '❌ Incorrecto'}
           </Text>
-          
+
           <Text style={styles.objectText}>
             Objeto buscado: {currentObject?.name} {currentObject?.icon}
           </Text>
@@ -95,7 +95,7 @@ export default function ResultScreen({ navigation }) {
               <Text style={styles.buttonText}>Reintentar</Text>
             </TouchableOpacity>
           )}
-          
+
           <TouchableOpacity
             style={styles.nextButton}
             onPress={handleNext}
@@ -106,7 +106,7 @@ export default function ResultScreen({ navigation }) {
           </TouchableOpacity>
         </View>
       </View>
-      
+
       <View style={styles.pagination}>
         <View style={styles.dot} />
         <View style={styles.dot} />
@@ -122,7 +122,6 @@ export default function ResultScreen({ navigation }) {
 const styles = StyleSheet.create({
   container: {
     flex: 1,
-    backgroundColor: '#ffffff',
     margin: 20,
     borderRadius: 24,
     shadowColor: '#000',
@@ -172,7 +171,7 @@ const styles = StyleSheet.create({
     marginBottom: 16,
   },
   correctText: {
-    color: '#4caf50',
+    color: '#2E7D32',
   },
   incorrectText: {
     color: '#f44336',

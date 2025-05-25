@@ -6,21 +6,29 @@ import {
   StyleSheet,
   SafeAreaView,
 } from 'react-native';
+import { LinearGradient } from 'expo-linear-gradient';
 
 export default function HomeScreen({ navigation }) {
   return (
-    <SafeAreaView style={styles.container}>
+    <SafeAreaView style={[styles.container, { backgroundColor: '#D6C9D9' }]}>
       <View style={styles.content}>
         <Text style={styles.title}>Detect IA</Text>
-        
+
         <TouchableOpacity
-          style={styles.playButton}
           onPress={() => navigation.navigate('MainGame')}
+          style={styles.playButtonContainer}
         >
-          <Text style={styles.playButtonText}>Jugar</Text>
+          <LinearGradient
+            colors={['#64B5F6', '#A1887F']}
+            start={{ x: 0, y: 0 }}
+            end={{ x: 1, y: 0 }}
+            style={styles.playButtonGradient}
+          >
+            <Text style={styles.playButtonText}>Jugar</Text>
+          </LinearGradient>
         </TouchableOpacity>
       </View>
-      
+
       <View style={styles.pagination}>
         <View style={[styles.dot, styles.activeDot]} />
         <View style={styles.dot} />
@@ -36,7 +44,6 @@ export default function HomeScreen({ navigation }) {
 const styles = StyleSheet.create({
   container: {
     flex: 1,
-    backgroundColor: '#ffffff',
     margin: 20,
     borderRadius: 24,
     shadowColor: '#000',
@@ -44,6 +51,9 @@ const styles = StyleSheet.create({
     shadowOpacity: 0.1,
     shadowRadius: 8,
     elevation: 5,
+    justifyContent: 'center',
+    alignItems: 'center',
+    padding: 20,
   },
   content: {
     flex: 1,
@@ -52,36 +62,45 @@ const styles = StyleSheet.create({
     paddingHorizontal: 24,
   },
   title: {
-    fontSize: 24,
-    fontWeight: '500',
-    color: '#000000',
+    fontSize: 38,
+    fontWeight: 'bold',
+    color: '#333333',
     marginBottom: 60,
+    textAlign: 'center',
   },
-  playButton: {
-    width: 96,
-    height: 96,
-    borderRadius: 48,
-    borderWidth: 2,
-    borderColor: '#000000',
+  playButtonContainer: {
+    borderRadius: 30,
+    overflow: 'hidden',
+    shadowColor: '#000',
+    shadowOffset: { width: 0, height: 4 },
+    shadowOpacity: 0.3,
+    shadowRadius: 6,
+    elevation: 8,
+  },
+  playButtonGradient: {
+    paddingVertical: 18,
+    paddingHorizontal: 60,
+    borderRadius: 30,
     justifyContent: 'center',
     alignItems: 'center',
   },
   playButtonText: {
-    fontSize: 16,
-    fontWeight: '500',
-    color: '#000000',
+    fontSize: 24,
+    fontWeight: 'bold',
+    color: '#ffffff',
   },
   pagination: {
+    position: 'absolute',
+    bottom: 20,
     flexDirection: 'row',
     justifyContent: 'center',
     alignItems: 'center',
-    paddingBottom: 24,
-    gap: 8,
+    gap: 10,
   },
   dot: {
-    width: 8,
-    height: 8,
-    borderRadius: 4,
+    width: 10,
+    height: 10,
+    borderRadius: 5,
     backgroundColor: '#d9d9d9',
   },
   activeDot: {

@@ -25,47 +25,33 @@ export default function MainGameScreen({ navigation }) {
     }
   };
 
-  const renderRow = (rowObjects) => (
-    <View key={rowObjects.map(obj => obj.id).join('-')} style={styles.row}>
-      {rowObjects.map((item) => (
-        <TouchableOpacity
-          key={item.id}
-          style={[
-            styles.objectCard,
-            item.found && styles.foundObjectCard
-          ]}
-          onPress={() => handleObjectPress(item)}
-          disabled={item.found}
-        >
-          <Image source={require(`../imag/${item.image}`)} style={styles.objectImage} resizeMode="contain" />
-          <Text style={styles.objectName}>{item.name}</Text>
-          {item.found && (
-            <View style={styles.foundIndicator}>
-              <Text style={styles.foundIcon}>👁️</Text>
-            </View>
-          )}
-        </TouchableOpacity>
-      ))}
-      {rowObjects.length === 1 && <View style={{ width: '45%', margin: 5 }} />} {/* Placeholder for even spacing */}
-    </View>
-  );
-
-  const pairs = objects.reduce((acc, curr, index, array) => {
-    if (index % 2 === 0) {
-      acc.push(array.slice(index, index + 2));
-    }
-    return acc;
-  }, []);
-
   return (
-    <SafeAreaView style={styles.container}>
+    <SafeAreaView style={[styles.container, { backgroundColor: '#D6C9D9' }]}>
       <View style={styles.header}>
         <Text style={styles.title}>Encuentra los objetos</Text>
         <Text style={styles.score}>Puntos: {score}</Text>
       </View>
 
       <View style={styles.content}>
-        {pairs.map(row => renderRow(row))}
+        {objects.map((item) => (
+          <TouchableOpacity
+            key={item.id}
+            style={[
+              styles.objectCard,
+              item.found && styles.foundObjectCard
+            ]}
+            onPress={() => handleObjectPress(item)}
+            disabled={item.found}
+          >
+            <Image source={require(`../imag/${item.image}`)} style={styles.objectImage} resizeMode="contain" />
+            <Text style={styles.objectName}>{item.name}</Text>
+            {item.found && (
+              <View style={styles.foundIndicator}>
+                <Text style={styles.foundIcon}>👁️</Text>
+              </View>
+            )}
+          </TouchableOpacity>
+        ))}
       </View>
 
       <View style={styles.pagination}>
@@ -78,7 +64,6 @@ export default function MainGameScreen({ navigation }) {
 const styles = StyleSheet.create({
   container: {
     flex: 1,
-    backgroundColor: '#ffffff',
     margin: 20,
     borderRadius: 24,
     shadowColor: '#000',
@@ -101,43 +86,31 @@ const styles = StyleSheet.create({
   },
   score: {
     fontSize: 16,
-    color: '#312b2b',
+    color: '#000000',
   },
   content: {
-    flex: 1,
-    paddingHorizontal: 10, // Reducimos el padding horizontal
-    marginTop: 10, // Añadimos un poco de margen superior
-  },
-row: {
+    flexGrow: 1,
+    paddingHorizontal: 10,
+    marginTop: 10,
     flexDirection: 'row',
-    justifyContent: 'space-between', // Cambiamos a space-between
-    marginBottom: 10,
-    paddingHorizontal: 10, // Añadimos un poco de padding horizontal a la fila
+    flexWrap: 'wrap',
+    justifyContent: 'space-around',
+    alignItems: 'flex-start',
   },
   objectCard: {
-    width: '48%', // Volvemos a un ancho cercano a la mitad
+    width: '45%',
     aspectRatio: 1,
-    backgroundColor: '#d9d9d9',
+    backgroundColor: '#FFFFFF',
     borderRadius: 12,
+    margin: 8,
     justifyContent: 'center',
     alignItems: 'center',
     position: 'relative',
-    marginVertical: 5, // Añadimos un poco de margen vertical
-  },
-  objectCard: {
-    width: '45%', // Mantenemos el ancho
-    aspectRatio: 1,
-    backgroundColor: '#d9d9d9',
-    borderRadius: 12,
-    margin: 5, // Reducimos el margen
-    justifyContent: 'center',
-    alignItems: 'center',
-    position: 'relative',
+    borderWidth: 1,
+    borderColor: '#000000',
   },
   foundObjectCard: {
-    backgroundColor: '#e8f5e8',
-    borderWidth: 2,
-    borderColor: '#4caf50',
+    backgroundColor: 'rgba(144, 238, 144, 0.5)',
   },
   objectName: {
     fontSize: 14,
@@ -150,15 +123,11 @@ row: {
     position: 'absolute',
     top: 8,
     right: 8,
-    backgroundColor: '#4caf50',
-    borderRadius: 12,
-    width: 24,
-    height: 24,
-    justifyContent: 'center',
-    alignItems: 'center',
+    backgroundColor: 'transparent',
   },
   foundIcon: {
-    fontSize: 12,
+    fontSize: 16,
+    color: '#2E7D32',
   },
   pagination: {
     flexDirection: 'row',
@@ -177,8 +146,8 @@ row: {
     backgroundColor: '#000000',
   },
   objectImage: {
-    width: 60,
-    height: 60,
+    width: '70%',
+    height: '70%',
     resizeMode: 'contain',
     marginBottom: 5,
   },

@@ -6,21 +6,20 @@ import {
   StyleSheet,
   SafeAreaView,
   TextInput,
-  Alert,
 } from 'react-native';
 import { useGame } from '../context/GameContext';
 
 export default function GameOverScreen({ navigation }) {
-  const { score, resetGame, addToLeaderboard } = useGame();
-  const [playerName, setPlayerName] = useState('');
-  const [nameSubmitted, setNameSubmitted] = useState(false);
+  const { score, resetGame, saveScore } = useGame();
+  const [name, setName] = useState('');
 
-  const handleSubmitScore = () => {
-    if (playerName.trim()) {
-      addToLeaderboard(playerName.trim(), score);
-      setNameSubmitted(true);
+  const handleSaveScore = () => {
+    if (name.trim()) {
+      saveScore(name, score);
+      setName('');
+      navigation.navigate('Leaderboard');
     } else {
-      Alert.alert('Error', 'Por favor ingresa tu nombre');
+      alert('Por favor, ingresa tu nombre.');
     }
   };
 
@@ -29,74 +28,58 @@ export default function GameOverScreen({ navigation }) {
     navigation.navigate('MainGame');
   };
 
+  const handleViewLeaderboard = () => {
+    navigation.navigate('Leaderboard');
+  };
+
   const handleGoHome = () => {
     resetGame();
     navigation.navigate('Home');
   };
 
-  const handleViewLeaderboard = () => {
-    navigation.navigate('Leaderboard');
-  };
-
   return (
-    <SafeAreaView style={styles.container}>
+    <SafeAreaView style={[styles.container, { backgroundColor: '#D6C9D9' }]}>
       <View style={styles.content}>
-        <Text style={styles.title}>¡Partida Terminada!</Text>
-        
-        <View style={styles.scoreContainer}>
-          <Text style={styles.scoreLabel}>Puntuación Final:</Text>
-          <Text style={styles.scoreValue}>{score} puntos</Text>
-        </View>
+        <Text style={styles.gameOverText}>¡Partida Terminada!</Text>
+        <Text style={styles.scoreText}>Puntuación Final:</Text>
+        <Text style={styles.finalScore}>{score} puntos</Text>
 
-        {!nameSubmitted ? (
-          <View style={styles.nameInputContainer}>
-            <Text style={styles.nameLabel}>Ingresa tu nombre:</Text>
-            <TextInput
-              style={styles.nameInput}
-              value={playerName}
-              onChangeText={setPlayerName}
-              placeholder="Tu nombre"
-              maxLength={20}
-            />
-            <TouchableOpacity
-              style={styles.submitButton}
-              onPress={handleSubmitScore}
-            >
-              <Text style={styles.buttonText}>Guardar Puntuación</Text>
-            </TouchableOpacity>
-          </View>
-        ) : (
-          <View style={styles.successContainer}>
-            <Text style={styles.successText}>
-              ¡Puntuación guardada exitosamente!
-            </Text>
-          </View>
-        )}
+        <TextInput
+          style={styles.input}
+          placeholder="Ingresa tu nombre"
+          value={name}
+          onChangeText={setName}
+        />
 
-        <View style={styles.buttonContainer}>
-          <TouchableOpacity
-            style={styles.playAgainButton}
-            onPress={handlePlayAgain}
-          >
-            <Text style={styles.buttonText}>Volver a Jugar</Text>
-          </TouchableOpacity>
-          
-          <TouchableOpacity
-            style={styles.leaderboardButton}
-            onPress={handleViewLeaderboard}
-          >
-            <Text style={styles.buttonText}>Ver Tabla de Clasificación</Text>
-          </TouchableOpacity>
-          
-          <TouchableOpacity
-            style={styles.homeButton}
-            onPress={handleGoHome}
-          >
-            <Text style={styles.buttonText}>Volver al Inicio</Text>
-          </TouchableOpacity>
-        </View>
+        <TouchableOpacity
+          style={[styles.button, { backgroundColor: '#008080' }]}
+          onPress={handleSaveScore}
+        >
+          <Text style={styles.buttonText}>Guardar Puntuación</Text>
+        </TouchableOpacity>
+
+        <TouchableOpacity
+          style={[styles.button, { backgroundColor: '#A8BFA5' }]}
+          onPress={handlePlayAgain}
+        >
+          <Text style={styles.buttonText}>Volver a Jugar</Text>
+        </TouchableOpacity>
+
+        <TouchableOpacity
+          style={[styles.button, { backgroundColor: '#8FBC8F', justifyContent: 'center' }]}
+          onPress={handleViewLeaderboard}
+        >
+          <Text style={styles.buttonText}>Ver Tabla de Clasificación</Text>
+        </TouchableOpacity>
+
+        <TouchableOpacity
+          style={[styles.button, { backgroundColor: '#E27D60' }]}
+          onPress={handleGoHome}
+        >
+          <Text style={styles.buttonText}>Volver al Inicio</Text>
+        </TouchableOpacity>
       </View>
-      
+
       <View style={styles.pagination}>
         <View style={styles.dot} />
         <View style={styles.dot} />
@@ -112,7 +95,6 @@ export default function GameOverScreen({ navigation }) {
 const styles = StyleSheet.create({
   container: {
     flex: 1,
-    backgroundColor: '#ffffff',
     margin: 20,
     borderRadius: 24,
     shadowColor: '#000',
@@ -120,105 +102,69 @@ const styles = StyleSheet.create({
     shadowOpacity: 0.1,
     shadowRadius: 8,
     elevation: 5,
+    justifyContent: 'center',
+    alignItems: 'center',
+    padding: 20,
   },
   content: {
     flex: 1,
-    paddingHorizontal: 24,
-    paddingTop: 24,
     justifyContent: 'center',
-  },
-  title: {
-    fontSize: 24,
-    fontWeight: '600',
-    color: '#000000',
-    textAlign: 'center',
-    marginBottom: 32,
-  },
-  scoreContainer: {
     alignItems: 'center',
-    marginBottom: 32,
+    paddingHorizontal: 24,
   },
-  scoreLabel: {
-    fontSize: 18,
-    color: '#312b2b',
+  gameOverText: {
+    fontSize: 28,
+    fontWeight: 'bold',
+    color: '#000000',
+    marginBottom: 20,
+    textAlign: 'center',
+  },
+  scoreText: {
+    fontSize: 20,
+    color: '#333333',
     marginBottom: 8,
   },
-  scoreValue: {
-    fontSize: 32,
+  finalScore: {
+    fontSize: 36,
     fontWeight: 'bold',
-    color: '#4caf50',
-  },
-  nameInputContainer: {
+    color: 'green',
     marginBottom: 32,
   },
-  nameLabel: {
-    fontSize: 16,
-    color: '#312b2b',
-    marginBottom: 12,
-    textAlign: 'center',
-  },
-  nameInput: {
+  input: {
+    width: '80%',
+    padding: 15,
+    borderColor: '#ccc',
     borderWidth: 1,
-    borderColor: '#d9d9d9',
     borderRadius: 8,
-    paddingHorizontal: 16,
-    paddingVertical: 12,
+    marginBottom: 20,
     fontSize: 16,
-    marginBottom: 16,
-    textAlign: 'center',
+    backgroundColor: '#ffffff',
   },
-  submitButton: {
-    backgroundColor: '#4caf50',
-    paddingVertical: 16,
+  button: {
+    width: '80%',
+    paddingVertical: 15,
     borderRadius: 8,
     alignItems: 'center',
-  },
-  successContainer: {
-    alignItems: 'center',
-    marginBottom: 32,
-  },
-  successText: {
-    fontSize: 16,
-    color: '#4caf50',
-    textAlign: 'center',
-  },
-  buttonContainer: {
-    gap: 12,
-  },
-  playAgainButton: {
-    backgroundColor: '#312b2b',
-    paddingVertical: 16,
-    borderRadius: 8,
-    alignItems: 'center',
-  },
-  leaderboardButton: {
-    backgroundColor: '#2196f3',
-    paddingVertical: 16,
-    borderRadius: 8,
-    alignItems: 'center',
-  },
-  homeButton: {
-    backgroundColor: '#757575',
-    paddingVertical: 16,
-    borderRadius: 8,
-    alignItems: 'center',
+    marginBottom: 12,
   },
   buttonText: {
     color: '#ffffff',
-    fontSize: 16,
-    fontWeight: '500',
+    fontSize: 18,
+    fontWeight: 'bold',
+    textAlign: 'center',
   },
   pagination: {
+    position: 'absolute',
+    bottom: 20,
     flexDirection: 'row',
     justifyContent: 'center',
     alignItems: 'center',
-    paddingBottom: 24,
-    gap: 8,
+    gap: 10,
   },
   dot: {
-    width: 8,
-    height: 8,
-    borderRadius: 4,
+    width: 10,
+    height: 10,
+    borderRadius: 5,
     backgroundColor: '#d9d9d9',
   },
   activeDot: {
